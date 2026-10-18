@@ -50,6 +50,11 @@ BoxArt Studio is a lightweight, modern Windows utility that automatically scans 
 4. Let the app scan your games, or manually pick alternative covers from the built-in studio interface.
 5. Toggle your preferred overlays (Stickers) and hit **Apply**!
 
+6. ### ⚠️ System Requirements
+This is a lightweight framework-dependent build. To run this application, please ensure your PC has the following official Microsoft runtimes installed:
+1. [.NET 8.0 Desktop Runtime (x64)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+2. [Windows App SDK 1.8 Runtime (x64)](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads)
+
 ## 🛠️ Tech Stack
 
 * **Framework:** WinUI 3 / Windows App SDK (C#)
