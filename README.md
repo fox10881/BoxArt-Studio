@@ -2,7 +2,8 @@
 <img width="3822" height="2004" alt="image" src="https://github.com/user-attachments/assets/cb368004-33ad-4b02-9565-02fa550ae7c7" />
 <img width="3831" height="2013" alt="image" src="https://github.com/user-attachments/assets/709f06ee-5621-4595-9389-ea8b3aa3957a" />
 
-<img width="3834" height="2001" alt="image" src="https://github.com/user-attachments/assets/466f44cf-ad13-45db-bd24-feccbff371bd" />
+<img width="3810" height="2016" alt="Screenshot 2026-10-18 034840" src="https://github.com/user-attachments/assets/25d5e901-7117-42b7-be8b-b60d323a838c" />
+
 
 **Turn your boring Windows folders and game shortcuts into a beautiful, physical-looking game shelf.**
 
