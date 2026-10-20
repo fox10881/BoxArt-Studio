@@ -1,3 +1,5 @@
+🌍 **Language:** <strong>English</strong> ∙ [العربية](README.ar.md)
+
 # 🎮 BoxArt Studio
 <img width="3804" height="2007" alt="image" src="https://github.com/user-attachments/assets/417e0a97-eb08-442b-947e-71a824b85596" />
 <img width="3798" height="1995" alt="image" src="https://github.com/user-attachments/assets/325f457a-5029-4fc7-9a3e-c1f6284fcc41" />
