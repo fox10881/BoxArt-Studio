@@ -10,6 +10,8 @@ public sealed partial class HomeView
 
     public event EventHandler<ScanMode>? ModeSelected;
     public event EventHandler? RepairRequested;
+    /// <summary>Raised when the Desktop Games flyout opens — the host fills its items.</summary>
+    public event Action<MenuFlyout>? DesktopMenuRequested;
 
     public HomeView()
     {
@@ -27,4 +29,7 @@ public sealed partial class HomeView
 
     private void RepairCard_Click(object sender, RoutedEventArgs e) =>
         RepairRequested?.Invoke(this, EventArgs.Empty);
+
+    private void DesktopMenuFlyout_Opening(object sender, object e) =>
+        DesktopMenuRequested?.Invoke(DesktopMenuFlyout);
 }

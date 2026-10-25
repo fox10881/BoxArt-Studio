@@ -19,6 +19,8 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <DefaultLanguage>en-US</DefaultLanguage>
+    <!-- Custom Program.cs owns Main (single-instance gate) — skip the generated entry point. -->
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

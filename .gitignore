@@ -13,3 +13,8 @@ GitHub_Release/
 
 # Nested legacy release artifacts (superseded by the Releases page)
 /BoxArt-Studio/
+
+# Release binaries & archives — distributed exclusively via GitHub Releases
+*.exe
+*.zip
+*.msi

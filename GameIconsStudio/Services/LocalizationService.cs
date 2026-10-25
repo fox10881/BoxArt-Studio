@@ -110,6 +110,10 @@ public static class LocalizationService
         ["BtnCopyLogs"] = "Copy Logs",
         ["BtnClearLogs"] = "Clear",
         ["BtnClose"] = "Close",
+        ["DesktopMenu"] = "Desktop Games",
+        ["DesktopMenuDesc"] = "One-click load any shortcut straight from your Desktop — Public Desktop items included.",
+        ["DesktopMenuLoading"] = "Scanning Desktop…",
+        ["DesktopMenuEmpty"] = "No shortcuts found on the Desktop",
     };
 
     private static readonly Dictionary<string, string> Ar = new()
@@ -206,6 +210,10 @@ public static class LocalizationService
         ["BtnCopyLogs"] = "نسخ السجل",
         ["BtnClearLogs"] = "مسح",
         ["BtnClose"] = "إغلاق",
+        ["DesktopMenu"] = "ألعاب سطح المكتب",
+        ["DesktopMenuDesc"] = "حمّل أي اختصار من سطح المكتب مباشرةً — بما فيها اختصارات سطح المكتب العام.",
+        ["DesktopMenuLoading"] = "جارٍ فحص سطح المكتب…",
+        ["DesktopMenuEmpty"] = "لا توجد اختصارات على سطح المكتب",
     };
 
     public static string Current { get; private set; } = English;
@@ -327,4 +335,8 @@ public sealed class Localizer
     public string BtnCopyLogs => LocalizationService.T(nameof(BtnCopyLogs));
     public string BtnClearLogs => LocalizationService.T(nameof(BtnClearLogs));
     public string BtnClose => LocalizationService.T(nameof(BtnClose));
+    public string DesktopMenu => LocalizationService.T(nameof(DesktopMenu));
+    public string DesktopMenuDesc => LocalizationService.T(nameof(DesktopMenuDesc));
+    public string DesktopMenuLoading => LocalizationService.T(nameof(DesktopMenuLoading));
+    public string DesktopMenuEmpty => LocalizationService.T(nameof(DesktopMenuEmpty));
 }

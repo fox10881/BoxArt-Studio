@@ -68,6 +68,7 @@ public sealed partial class MainWindow : Window
         _home = new HomeView { VM = _vm };
         _home.ModeSelected += OnModeSelected;
         _home.RepairRequested += OnRepairRequested;
+        _home.DesktopMenuRequested += OnDesktopMenuRequested;
 
         _studio = new StudioView { VM = _vm };
         _studio.BuildRequested += OnBuildRequested;
@@ -191,6 +192,68 @@ public sealed partial class MainWindow : Window
                     ? "That folder has no sub-folders."
                     : "No .lnk shortcuts were found in that folder.");
         return (results, folder.Path);
+    }
+
+    /// <summary>
+    /// "Desktop Games" quick menu: fills the flyout with every .lnk on the
+    /// merged Desktop (user + Public), sorted alphabetically. Bypasses the
+    /// OS picker's single-location Desktop view entirely.
+    /// </summary>
+    private async void OnDesktopMenuRequested(MenuFlyout menu)
+    {
+        menu.Items.Clear();
+        menu.Items.Add(new MenuFlyoutItem { Text = _vm.Loc.DesktopMenuLoading, IsEnabled = false });
+
+        var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        var shortcuts = await _scanner.ScanFolderAsync(desktop, recursive: false);
+
+        menu.Items.Clear();
+        if (shortcuts.Count == 0)
+        {
+            menu.Items.Add(new MenuFlyoutItem { Text = _vm.Loc.DesktopMenuEmpty, IsEnabled = false });
+            return;
+        }
+
+        foreach (var s in shortcuts.OrderBy(x => x.Name, StringComparer.CurrentCultureIgnoreCase))
+        {
+            var path = s.Path;
+            var item = new MenuFlyoutItem
+            {
+                Text = s.Name,
+                Icon = new FontIcon { Glyph = "\uE71B" },
+            };
+            item.Click += (_, _) => _ = QuickLoadShortcutAsync(path);
+            menu.Items.Add(item);
+        }
+    }
+
+    /// <summary>Loads one desktop shortcut into the Studio — same pipeline as the file picker.</summary>
+    private async Task QuickLoadShortcutAsync(string path)
+    {
+        if (_picking) return;
+        _picking = true;
+        try
+        {
+            _vm.Progress = 15;
+            var list = await _scanner.FromPathsAsync(new[] { path });
+            _vm.Progress = 0;
+            if (list.Count == 0)
+            {
+                ShowToast(IconKind.FileStack, ToastTone.Warn,
+                    "Shortcut unreadable", "That shortcut could not be loaded.");
+                return;
+            }
+
+            _vm.ScanMode = ScanMode.SpecificShortcuts;
+            ModeChipText.Text = _vm.ScanModeTitle;
+            PopulateGames(list, ScanMode.SpecificShortcuts, root: null);
+            ShowStudio();
+            _ = FetchCoversAsync();
+        }
+        finally
+        {
+            _picking = false;
+        }
     }
 
     private void PopulateGames(IReadOnlyList<ShortcutInfo> items, ScanMode mode, string? root)

@@ -15,6 +15,7 @@
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="12" />
         </Style>
+        <Style x:Key="DesktopMenuCardStyle" TargetType="DropDownButton" BasedOn="{StaticResource ModeCardStyle}" />
         <Style x:Key="ModeCardIconWrap" TargetType="Border">
             <Setter Property="Width" Value="44" />
             <Setter Property="Height" Value="44" />
@@ -225,6 +226,22 @@
                             </StackPanel>
                         </Button>
                     </Grid>
+
+                    <!-- Desktop quick pick: merged user + Public Desktop shortcuts -->
+                    <DropDownButton Style="{StaticResource DesktopMenuCardStyle}">
+                        <DropDownButton.Flyout>
+                            <MenuFlyout x:Name="DesktopMenuFlyout" Opening="DesktopMenuFlyout_Opening" />
+                        </DropDownButton.Flyout>
+                        <StackPanel Orientation="Horizontal" Spacing="16">
+                            <Border Style="{StaticResource ModeCardIconWrap}">
+                                <c:LucideIcon Kind="Gamepad" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="{ThemeResource BrushPrimary}" StrokeThickness="1.6" />
+                            </Border>
+                            <StackPanel Spacing="2" VerticalAlignment="Center">
+                                <TextBlock FontSize="14" FontWeight="SemiBold" Text="{x:Bind VM.Loc.DesktopMenu, Mode=OneWay}" />
+                                <TextBlock FontSize="12" Foreground="{ThemeResource BrushMutedForeground}" Text="{x:Bind VM.Loc.DesktopMenuDesc, Mode=OneWay}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DropDownButton>
 
                     <!-- Repair card -->
                     <Button
