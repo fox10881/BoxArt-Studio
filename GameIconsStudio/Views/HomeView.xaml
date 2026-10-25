@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="GameIconsStudio.Views.HomeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:GameIconsStudio.Controls">
+
+    <UserControl.Resources>
+        <Style x:Key="ModeCardStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="20" />
+            <Setter Property="Background" Value="{ThemeResource BrushCard}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource BrushBorder}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="12" />
+        </Style>
+        <Style x:Key="ModeCardIconWrap" TargetType="Border">
+            <Setter Property="Width" Value="44" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Background" Value="{ThemeResource BrushPrimaryTint}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource BrushPrimaryBorderSoft}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid
+            MaxWidth="1152"
+            Margin="0,0,0,0"
+            Padding="40,40"
+            HorizontalAlignment="Center">
+
+            <StackPanel Spacing="40">
+
+                <!-- ===================== HERO ===================== -->
+                <Grid ColumnSpacing="40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Spacing="16" VerticalAlignment="Center">
+                        <!-- badge -->
+                        <Border
+                            Padding="12,4"
+                            HorizontalAlignment="Left"
+                            Background="{ThemeResource BrushPrimaryTint}"
+                            BorderBrush="{ThemeResource BrushPrimaryBorderSoft}"
+                            BorderThickness="1"
+                            CornerRadius="999">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <c:LucideIcon
+                                    Kind="Sparkles"
+                                    Width="14"
+                                    Height="14"
+                                    Stroke="{ThemeResource BrushPrimary}"
+                                    StrokeThickness="1.8" />
+                                <TextBlock
+                                    FontSize="12"
+                                    FontWeight="Medium"
+                                    Foreground="{ThemeResource BrushPrimary}"
+                                    Text="{x:Bind VM.Loc.HeroBadge, Mode=OneWay}" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- headline -->
+                        <TextBlock FontSize="46" FontWeight="SemiBold" LineHeight="56" TextWrapping="Wrap">
+                            <Run Text="{x:Bind VM.Loc.HeroTitleA, Mode=OneWay}" />
+                            <Run Text="{x:Bind VM.Loc.HeroTitleB, Mode=OneWay}" Foreground="{ThemeResource BrushBrandGradient}" />
+                        </TextBlock>
+
+                        <TextBlock
+                            MaxWidth="576"
+                            FontSize="15"
+                            Foreground="{ThemeResource BrushMutedForeground}"
+                            LineHeight="24"
+                            TextWrapping="Wrap"
+                            Text="{x:Bind VM.Loc.HeroSub, Mode=OneWay}" />
+                    </StackPanel>
+
+                    <!-- cover fan -->
+                    <Grid
+                        Grid.Column="1"
+                        Width="320"
+                        Height="240"
+                        VerticalAlignment="Center">
+                        <Ellipse
+                            Width="270"
+                            Height="64"
+                            VerticalAlignment="Bottom"
+                            Margin="0,0,0,8"
+                            Fill="{ThemeResource BrushCoverHalo}" />
+
+                        <Border Width="112" Height="168" CornerRadius="4">
+                            <Border.RenderTransform>
+                                <CompositeTransform TranslateX="-168" TranslateY="16" Rotation="-12" />
+                            </Border.RenderTransform>
+                            <Border.Projection>
+                                <PlaneProjection />
+                            </Border.Projection>
+                            <Border.Child>
+                                <c:CoverFrame Platform="None" CoverUri="ms-appx:///Assets/covers/showcase-base.png" />
+                            </Border.Child>
+                        </Border>
+
+                        <Border Width="112" Height="168" CornerRadius="4">
+                            <Border.RenderTransform>
+                                <CompositeTransform TranslateX="-67" Rotation="-4" />
+                            </Border.RenderTransform>
+                            <Border.Child>
+                                <c:CoverFrame Platform="Ps5Blue" CoverUri="ms-appx:///Assets/covers/showcase-base.png" />
+                            </Border.Child>
+                        </Border>
+
+                        <Border Width="112" Height="168" CornerRadius="4">
+                            <Border.RenderTransform>
+                                <CompositeTransform TranslateX="34" Rotation="4" />
+                            </Border.RenderTransform>
+                            <Border.Child>
+                                <c:CoverFrame Platform="XboxSeries" CoverUri="ms-appx:///Assets/covers/showcase-base.png" />
+                            </Border.Child>
+                        </Border>
+
+                        <Border Width="112" Height="168" CornerRadius="4">
+                            <Border.RenderTransform>
+                                <CompositeTransform TranslateX="134" TranslateY="16" Rotation="12" />
+                            </Border.RenderTransform>
+                            <Border.Child>
+                                <c:CoverFrame Platform="Epic" CoverUri="ms-appx:///Assets/covers/showcase-base.png" />
+                            </Border.Child>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!-- ===================== MODE CARDS ===================== -->
+                <StackPanel Spacing="16">
+                    <TextBlock
+                        Style="{ThemeResource SectionHeadingStyle}"
+                        Text="{x:Bind VM.Loc.ChooseMode, Mode=OneWay}" />
+
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" Style="{StaticResource ModeCardStyle}" Click="ModeCard_Click" Tag="ShortcutsFolder">
+                            <StackPanel Spacing="20">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Style="{StaticResource ModeCardIconWrap}">
+                                        <c:LucideIcon Kind="FolderSymlink" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="{ThemeResource BrushPrimary}" StrokeThickness="1.6" />
+                                    </Border>
+                                    <c:LucideIcon Grid.Column="1" Kind="ArrowUpRight" Width="16" Height="16" VerticalAlignment="Top" Opacity="0.45" Stroke="{ThemeResource BrushMutedForeground}" StrokeThickness="1.8" />
+                                </Grid>
+                                <StackPanel Spacing="6">
+                                    <TextBlock FontSize="14" FontWeight="SemiBold" Text="{x:Bind VM.Loc.ModeShortcuts, Mode=OneWay}" />
+                                    <TextBlock FontSize="12" Foreground="{ThemeResource BrushMutedForeground}" LineHeight="18" TextWrapping="Wrap" Text="{x:Bind VM.Loc.ModeShortcutsDesc, Mode=OneWay}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="1" Style="{StaticResource ModeCardStyle}" Click="ModeCard_Click" Tag="AllSubFolders">
+                            <StackPanel Spacing="20">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Style="{StaticResource ModeCardIconWrap}">
+                                        <c:LucideIcon Kind="FolderTree" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="{ThemeResource BrushPrimary}" StrokeThickness="1.6" />
+                                    </Border>
+                                    <c:LucideIcon Grid.Column="1" Kind="ArrowUpRight" Width="16" Height="16" VerticalAlignment="Top" Opacity="0.45" Stroke="{ThemeResource BrushMutedForeground}" StrokeThickness="1.8" />
+                                </Grid>
+                                <StackPanel Spacing="6">
+                                    <TextBlock FontSize="14" FontWeight="SemiBold" Text="{x:Bind VM.Loc.ModeSubFolders, Mode=OneWay}" />
+                                    <TextBlock FontSize="12" Foreground="{ThemeResource BrushMutedForeground}" LineHeight="18" TextWrapping="Wrap" Text="{x:Bind VM.Loc.ModeSubFoldersDesc, Mode=OneWay}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="2" Style="{StaticResource ModeCardStyle}" Click="ModeCard_Click" Tag="SpecificFolder">
+                            <StackPanel Spacing="20">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Style="{StaticResource ModeCardIconWrap}">
+                                        <c:LucideIcon Kind="FolderOpen" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="{ThemeResource BrushPrimary}" StrokeThickness="1.6" />
+                                    </Border>
+                                    <c:LucideIcon Grid.Column="1" Kind="ArrowUpRight" Width="16" Height="16" VerticalAlignment="Top" Opacity="0.45" Stroke="{ThemeResource BrushMutedForeground}" StrokeThickness="1.8" />
+                                </Grid>
+                                <StackPanel Spacing="6">
+                                    <TextBlock FontSize="14" FontWeight="SemiBold" Text="{x:Bind VM.Loc.ModeFolder, Mode=OneWay}" />
+                                    <TextBlock FontSize="12" Foreground="{ThemeResource BrushMutedForeground}" LineHeight="18" TextWrapping="Wrap" Text="{x:Bind VM.Loc.ModeFolderDesc, Mode=OneWay}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="3" Style="{StaticResource ModeCardStyle}" Click="ModeCard_Click" Tag="SpecificShortcuts">
+                            <StackPanel Spacing="20">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Style="{StaticResource ModeCardIconWrap}">
+                                        <c:LucideIcon Kind="FileStack" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="{ThemeResource BrushPrimary}" StrokeThickness="1.6" />
+                                    </Border>
+                                    <c:LucideIcon Grid.Column="1" Kind="ArrowUpRight" Width="16" Height="16" VerticalAlignment="Top" Opacity="0.45" Stroke="{ThemeResource BrushMutedForeground}" StrokeThickness="1.8" />
+                                </Grid>
+                                <StackPanel Spacing="6">
+                                    <TextBlock FontSize="14" FontWeight="SemiBold" Text="{x:Bind VM.Loc.ModePicks, Mode=OneWay}" />
+                                    <TextBlock FontSize="12" Foreground="{ThemeResource BrushMutedForeground}" LineHeight="18" TextWrapping="Wrap" Text="{x:Bind VM.Loc.ModePicksDesc, Mode=OneWay}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <!-- Repair card -->
+                    <Button
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        Padding="20"
+                        Background="{ThemeResource BrushCard}"
+                        BorderBrush="{ThemeResource BrushBorder}"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Click="RepairCard_Click">
+                        <Button.Resources>
+                            <ResourceDictionary>
+                                <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{ThemeResource AppCardHover}" />
+                            </ResourceDictionary>
+                        </Button.Resources>
+                        <Grid ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border
+                                Width="44"
+                                Height="44"
+                                VerticalAlignment="Center"
+                                Background="{ThemeResource BrushGlowTint}"
+                                BorderBrush="{ThemeResource BrushGlowBorder}"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <c:LucideIcon
+                                    Kind="Wrench"
+                                    Width="20"
+                                    Height="20"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Stroke="{ThemeResource BrushGlow}"
+                                    StrokeThickness="1.6" />
+                            </Border>
+
+                            <StackPanel Grid.Column="1" Spacing="6" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock FontSize="14" FontWeight="SemiBold" Text="{x:Bind VM.Loc.RepairTitle, Mode=OneWay}" />
+                                    <Border
+                                        Padding="6,2"
+                                        VerticalAlignment="Center"
+                                        Background="{ThemeResource BrushGlowTint}"
+                                        CornerRadius="6">
+                                        <TextBlock
+                                            FontSize="10"
+                                            FontWeight="Medium"
+                                            CharacterSpacing="100"
+                                            Foreground="{ThemeResource BrushGlow}"
+                                            Text="{x:Bind VM.Loc.SystemTool, Mode=OneWay}" />
+                                    </Border>
+                                </StackPanel>
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{ThemeResource BrushMutedForeground}"
+                                    LineHeight="18"
+                                    TextWrapping="Wrap"
+                                    Text="{x:Bind VM.Loc.RepairDesc, Mode=OneWay}" />
+                            </StackPanel>
+
+                            <Border
+                                Grid.Column="2"
+                                Height="32"
+                                Padding="12,0"
+                                VerticalAlignment="Center"
+                                Background="{ThemeResource BrushSubtle}"
+                                BorderBrush="{ThemeResource BrushBorder}"
+                                BorderThickness="1"
+                                CornerRadius="6">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <c:LucideIcon
+                                        Kind="Play"
+                                        Width="12"
+                                        Height="12"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Stroke="{ThemeResource BrushForeground90}" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        FontWeight="Medium"
+                                        Foreground="{ThemeResource BrushForeground90}"
+                                        Text="{x:Bind VM.Loc.RunLabel, Mode=OneWay}" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
+
+

@@ -1,0 +1,15 @@
+# Build output
+bin/
+obj/
+*.user
+.vs/
+
+# App runtime artifacts
+crash_log.txt
+
+# Installer / release staging (release assets live on the Releases page)
+installer/
+GitHub_Release/
+
+# Nested legacy release artifacts (superseded by the Releases page)
+/BoxArt-Studio/

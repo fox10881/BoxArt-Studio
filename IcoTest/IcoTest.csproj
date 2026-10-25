@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWPF>false</UseWPF>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.4.0" />
+    <Compile Include="..\GameIconsStudio\Services\IconBuilderService.cs" Link="IconBuilderService.cs" />
+    <Compile Include="..\GameIconsStudio\Services\GameChoicesService.cs" Link="GameChoicesService.cs" />
+    <Compile Include="..\GameIconsStudio\Services\ShellShortcut.cs" Link="ShellShortcut.cs" />
+  </ItemGroup>
+</Project>

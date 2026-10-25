@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="GameIconsStudio.Controls.CoverFrame"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:GameIconsStudio.Controls"
+    FlowDirection="LeftToRight">
+
+    <!-- Design space: 200x300 (2:3) or 300x300 (1:1 stretch mode);
+         Viewbox scales it like the CSS cqw units in cover-frame.tsx -->
+    <Viewbox Stretch="Uniform">
+        <Border
+            x:Name="ContentBox"
+            Width="200"
+            Height="300"
+            VerticalAlignment="Center"
+            CornerRadius="6">
+            <Grid>
+
+                <!-- Cover art — fills the 2:3 box, never crops -->
+                <Border>
+                    <Border.Background>
+                        <ImageBrush x:Name="ArtBrush" Stretch="Fill" />
+                    </Border.Background>
+                </Border>
+
+                <!-- Platform template — transparent-center PNG overlaid on the art -->
+                <Image
+                    x:Name="TemplateImage"
+                    Stretch="Fill"
+                    FlowDirection="LeftToRight" />
+
+                <!-- ============ Surface filters ============ -->
+
+                <!-- Glossy: diagonal white glare -->
+                <Border x:Name="SurfaceGlossy" Visibility="Collapsed">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#8CFFFFFF" Offset="0" />
+                            <GradientStop Color="#33FFFFFF" Offset="0.28" />
+                            <GradientStop Color="#05FFFFFF" Offset="0.55" />
+                            <GradientStop Color="#00FFFFFF" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+
+                <!-- Matte: desaturating paper wash -->
+                <Border
+                    x:Name="SurfaceMatte"
+                    Background="#12C8C8C8"
+                    Visibility="Collapsed" />
+
+                <!-- Holographic: faint rainbow foil -->
+                <Border x:Name="SurfaceHolo" Visibility="Collapsed">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#38FF5A5A" Offset="0" />
+                            <GradientStop Color="#30FFC85A" Offset="0.18" />
+                            <GradientStop Color="#30FFF45A" Offset="0.34" />
+                            <GradientStop Color="#305AFF8C" Offset="0.5" />
+                            <GradientStop Color="#305AC8FF" Offset="0.66" />
+                            <GradientStop Color="#308C5AFF" Offset="0.82" />
+                            <GradientStop Color="#38FF5AC8" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+
+                <!-- Vintage: dark grunge vignette at the edges -->
+                <Border x:Name="SurfaceVintage" Visibility="Collapsed">
+                    <Border.Background>
+                        <RadialGradientBrush Center="0.5,0.5" RadiusX="0.72" RadiusY="0.72">
+                            <GradientStop Color="#0A1A1208" Offset="0.55" />
+                            <GradientStop Color="#59000000" Offset="1" />
+                        </RadialGradientBrush>
+                    </Border.Background>
+                </Border>
+
+                <!-- Empty state: shown whenever the game has no cover image -->
+                <Grid
+                    x:Name="EmptyOverlay"
+                    Background="#14000000"
+                    Visibility="Visible">
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="10">
+                        <c:LucideIcon
+                            Kind="Gamepad"
+                            Width="40"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            Stroke="{StaticResource BrushMutedFg80}"
+                            StrokeThickness="1.4" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="11"
+                            FontWeight="Medium"
+                            CharacterSpacing="160"
+                            Foreground="{StaticResource BrushMutedFg80}"
+                            Text="NO COVER" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+    </Viewbox>
+</UserControl>

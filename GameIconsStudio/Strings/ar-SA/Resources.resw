@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>1.3</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="AppTitle" xml:space="preserve"><value>BoxArt Studio</value></data>
+  <data name="HeroBadge" xml:space="preserve"><value>غلاف كرتوني PC · أغلفة 2:3</value></data>
+  <data name="HeroTitleA" xml:space="preserve"><value>حدّث شكل </value></data>
+  <data name="HeroTitleB" xml:space="preserve"><value>ألعابك.</value></data>
+  <data name="HeroSub" xml:space="preserve"><value>حوّل الاختصارات والمجلدات العادية إلى مكتبة ألعاب جميلة ومليئة بالحياة.</value></data>
+  <data name="ChooseMode" xml:space="preserve"><value>اختر الوضع</value></data>
+  <data name="ModeShortcuts" xml:space="preserve"><value>مجلد اختصارات</value></data>
+  <data name="ModeShortcutsDesc" xml:space="preserve"><value>افحص مجلدًا يحتوي على ملفات .lnk وطابق كل لعبة مع غلافها.</value></data>
+  <data name="ModeSubFolders" xml:space="preserve"><value>جميع المجلدات الفرعية</value></data>
+  <data name="ModeSubFoldersDesc" xml:space="preserve"><value>خصّص كل مجلدات الألعاب داخل مجلد رئيسي دفعة واحدة.</value></data>
+  <data name="ModeFolder" xml:space="preserve"><value>مجلد محدد</value></data>
+  <data name="ModeFolderDesc" xml:space="preserve"><value>استهدف مجلد لعبة واحدًا وامنحه غلافًا مخصصًا.</value></data>
+  <data name="ModePicks" xml:space="preserve"><value>اختصارات محددة</value></data>
+  <data name="ModePicksDesc" xml:space="preserve"><value>اختر ملفات ألعاب فردية وصمّمها واحدًا واحدًا.</value></data>
+  <data name="RepairTitle" xml:space="preserve"><value>إصلاح أيقونات النظام</value></data>
+  <data name="RepairDesc" xml:space="preserve"><value>أعد بناء ذاكرة أيقونات Windows لكي تظهر الأغلفة الجديدة فورًا.</value></data>
+  <data name="SystemTool" xml:space="preserve"><value>أداة نظام</value></data>
+  <data name="RunLabel" xml:space="preserve"><value>تشغيل</value></data>
+  <data name="BackHome" xml:space="preserve"><value>العودة إلى الرئيسية</value></data>
+  <data name="ModeLabel" xml:space="preserve"><value>الوضع:</value></data>
+  <data name="SettingsTooltip" xml:space="preserve"><value>إعدادات SteamGridDB API</value></data>
+  <data name="ScannedLibrary" xml:space="preserve"><value>المكتبة المفحوصة</value></data>
+  <data name="SearchPlaceholder" xml:space="preserve"><value>ابحث عن الألعاب</value></data>
+  <data name="CoverPreview" xml:space="preserve"><value>معاينة الغلاف · 2:3</value></data>
+  <data name="CaseBadges" xml:space="preserve"><value>شارات الغلاف</value></data>
+  <data name="ShortcutLabel" xml:space="preserve"><value>الاختصار</value></data>
+  <data name="CoverSourceLabel" xml:space="preserve"><value>مصدر الغلاف</value></data>
+  <data name="MatchConfidence" xml:space="preserve"><value>نسبة التطابق</value></data>
+  <data name="PlatformHeading" xml:space="preserve"><value>قالب المنصة</value></data>
+  <data name="PickTemplate" xml:space="preserve"><value>اختر قالب العلبة لهذه اللعبة</value></data>
+  <data name="BrowseTemplateTip" xml:space="preserve"><value>استورد قالبًا مخصصًا شفافًا (PNG/WebP)</value></data>
+  <data name="SurfaceHeading" xml:space="preserve"><value>تشطيبة السطح</value></data>
+  <data name="PickSurface" xml:space="preserve"><value>اختر تشطيبة لسطح الغلاف</value></data>
+  <data name="OverlayOriginal" xml:space="preserve"><value>الأصلي</value></data>
+  <data name="PlatformNone" xml:space="preserve"><value>بدون</value></data>
+  <data name="SurfaceNone" xml:space="preserve"><value>طبيعي</value></data>
+  <data name="SurfaceGlossy" xml:space="preserve"><value>لامع</value></data>
+  <data name="SurfaceMatte" xml:space="preserve"><value>مطفي</value></data>
+  <data name="SurfaceHolo" xml:space="preserve"><value>هولوجرام</value></data>
+  <data name="SurfaceVintage" xml:space="preserve"><value>قديم</value></data>
+  <data name="StretchSquareLabel" xml:space="preserve"><value>تمطيط لمربع 1:1</value></data>
+  <data name="BtnChooseCover" xml:space="preserve"><value>اختيار غلاف مختلف</value></data>
+  <data name="BtnWrongGame" xml:space="preserve"><value>تحديد كلعبة خاطئة</value></data>
+  <data name="BtnGoogle" xml:space="preserve"><value>صور جوجل</value></data>
+  <data name="BtnAiGenerate" xml:space="preserve"><value>توليد بالذكاء الاصطناعي</value></data>
+  <data name="AiDialogTitle" xml:space="preserve"><value>توليد غلاف بالذكاء الاصطناعي</value></data>
+  <data name="AiSubtitle" xml:space="preserve"><value>انسخ الأيقونة القديمة، ثم الصقها في Bing Image Creator لتوليد غلاف احترافي.</value></data>
+  <data name="AiNameLabel" xml:space="preserve"><value>اسم البرنامج</value></data>
+  <data name="AiDescLabel" xml:space="preserve"><value>وصف الفائدة من البرنامج</value></data>
+  <data name="AiDescPlaceholder" xml:space="preserve"><value>مثال: تعديل الصور، تصميم هندسي، الخ...</value></data>
+  <data name="AiCopyAssets" xml:space="preserve"><value>نسخ العناصر (الصق أيقونة البرنامج لتحسين جودة الصورة المخرجة)</value></data>
+  <data name="AiBtnCopyIcon" xml:space="preserve"><value>نسخ الأيقونة القديمة</value></data>
+  <data name="AiBtnCopyPrompt" xml:space="preserve"><value>نسخ وصف الذكاء الاصطناعي</value></data>
+  <data name="AiBtnGo" xml:space="preserve"><value>ذهاب</value></data>
+  <data name="AiBtnCancel" xml:space="preserve"><value>إلغاء</value></data>
+  <data name="AiCopiedIcon" xml:space="preserve"><value>تم نسخ الأيقونة إلى الحافظة ✓</value></data>
+  <data name="AiCopiedPrompt" xml:space="preserve"><value>تم نسخ وصف الذكاء الاصطناعي إلى الحافظة ✓</value></data>
+  <data name="AiCopyError" xml:space="preserve"><value>تعذّر نسخ الأيقونة: </value></data>
+  <data name="BtnPaste" xml:space="preserve"><value>لصق</value></data>
+  <data name="BtnBrowse" xml:space="preserve"><value>تصفح الجهاز</value></data>
+  <data name="AltCovers" xml:space="preserve"><value>أغلفة بديلة</value></data>
+  <data name="AltCoversSuffix" xml:space="preserve"><value> من SteamGridDB · انقر للتطبيق</value></data>
+  <data name="AltCoversEmpty" xml:space="preserve"><value>لا توجد أغلفة بديلة بعد — يتم تحميلها تلقائيًا بعد المطابقة، أو اضغط «اختيار غلاف مختلف».</value></data>
+  <data name="Live" xml:space="preserve"><value>مباشر</value></data>
+  <data name="ProcessedLabel" xml:space="preserve"><value>المعالجة</value></data>
+  <data name="MatchedLabel" xml:space="preserve"><value>المطابقة</value></data>
+  <data name="AttentionLabel" xml:space="preserve"><value>تحتاج مراجعة</value></data>
+  <data name="SuccessRateLabel" xml:space="preserve"><value>نسبة النجاح</value></data>
+  <data name="BtnBuild" xml:space="preserve"><value>تطبيق وبناء الأيقونات</value></data>
+  <data name="StatusMatched" xml:space="preserve"><value>تمت المطابقة</value></data>
+  <data name="StatusAttention" xml:space="preserve"><value>تحتاج مراجعة</value></data>
+  <data name="GamesSuffix" xml:space="preserve"><value> لعبة</value></data>
+  <data name="DialogTitle" xml:space="preserve"><value>ابحث عن اللعبة الصحيحة</value></data>
+  <data name="DialogPrimary" xml:space="preserve"><value>استخدام اللعبة المحددة</value></data>
+  <data name="Cancel" xml:space="preserve"><value>إلغاء</value></data>
+  <data name="SearchDialogPlaceholder" xml:space="preserve"><value>ابحث في SteamGridDB</value></data>
+  <data name="SearchDialogHint" xml:space="preserve"><value>اكتب للبحث في SteamGridDB</value></data>
+  <data name="SearchDialogFooter" xml:space="preserve"><value>اختر اللعبة الصحيحة — ستحل أغلفتها محل المطابقة الحالية.</value></data>
+  <data name="RepairDialogTitle" xml:space="preserve"><value>إصلاح أيقونات النظام</value></data>
+  <data name="RepairDialogPrimary" xml:space="preserve"><value>إصلاح</value></data>
+  <data name="RepairDialogBody" xml:space="preserve"><value>أعد بناء ذاكرة أيقونات Windows لكي تظهر الأغلفة الجديدة فورًا.
+
+يبث ذلك تحديث أيقونات النظام (SHChangeNotify + ie4uinit). لن تتم إعادة تشغيل Explorer.</value></data>
+  <data name="LangButton" xml:space="preserve"><value>English</value></data>
+  <data name="LangToastTitle" xml:space="preserve"><value>لغة الواجهة</value></data>
+  <data name="LangToastBody" xml:space="preserve"><value>تم التبديل إلى العربية.</value></data>
+  <data name="BtnRemoveIcon" xml:space="preserve"><value>إلغاء التخصيص</value></data>
+  <data name="ToastIconRemoved" xml:space="preserve"><value>تم إلغاء التخصيص</value></data>
+  <data name="ToastIconRemovedBody" xml:space="preserve"><value>تمت إعادة أيقونة {0}.</value></data>
+  <data name="DebugTooltip" xml:space="preserve"><value>سجل الأخطاء</value></data>
+  <data name="DebugTitle" xml:space="preserve"><value>سجل الأخطاء</value></data>
+  <data name="BtnCopyLogs" xml:space="preserve"><value>نسخ السجل</value></data>
+  <data name="BtnClearLogs" xml:space="preserve"><value>مسح</value></data>
+  <data name="BtnClose" xml:space="preserve"><value>إغلاق</value></data>
+</root>
+

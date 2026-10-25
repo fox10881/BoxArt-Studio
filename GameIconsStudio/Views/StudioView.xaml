@@ -1,0 +1,897 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="GameIconsStudio.Views.StudioView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:GameIconsStudio.Controls"
+    xmlns:local="using:GameIconsStudio"
+    Loaded="StudioView_Loaded">
+
+    <UserControl.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVis" />
+        <local:StatusToBrushConverter x:Key="StatusBrush" />
+        <local:StatusToBorderBrushConverter x:Key="StatusBorder" />
+        <local:StatusToTintBrushConverter x:Key="StatusTint" />
+        <local:BoolToResourceConverter x:Key="BoolRes" />
+        <local:CountToVisibilityConverter x:Key="CountToVis" />
+        <local:BoolToDoubleConverter x:Key="BoolToDouble" />
+        <local:PercentToWidthConverter x:Key="PctWidth" />
+        <local:InverseBoolConverter x:Key="InverseBool" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="64" />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="256" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- ===================== SIDEBAR ===================== -->
+            <Border
+                Background="{ThemeResource BrushCard}"
+                BorderBrush="{ThemeResource BrushBorder}"
+                BorderThickness="0,0,1,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Padding="12" Spacing="10">
+                        <Grid Margin="4,0">
+                            <TextBlock
+                                Style="{ThemeResource SectionHeadingStyle}"
+                                Text="{x:Bind VM.Loc.ScannedLibrary, Mode=OneWay}" />
+                            <TextBlock
+                                HorizontalAlignment="Right"
+                                FontSize="11"
+                                Foreground="{ThemeResource BrushMutedFg80}"
+                                Text="{x:Bind VM.GamesCountLabel, Mode=OneWay}" />
+                        </Grid>
+
+                        <!-- Search -->
+                        <Grid Height="32">
+                            <TextBox
+                                x:Name="SearchBox"
+                                Padding="28,0,10,0"
+                                VerticalContentAlignment="Center"
+                                Background="{ThemeResource BrushSubtle}"
+                                BorderBrush="{ThemeResource BrushInput}"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                FontSize="12"
+                                Foreground="{ThemeResource BrushForeground}"
+                                PlaceholderForeground="{ThemeResource BrushMutedFg80}"
+                                PlaceholderText="{x:Bind VM.Loc.SearchPlaceholder, Mode=OneWay}"
+                                TextChanged="SearchBox_TextChanged" />
+                            <c:LucideIcon
+                                Kind="Search"
+                                Width="14"
+                                Height="14"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                IsHitTestVisible="False"
+                                Stroke="{ThemeResource BrushMutedForeground}"
+                                StrokeThickness="2" />
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Games list -->
+                    <ListView
+                        x:Name="GamesList"
+                        Grid.Row="1"
+                        Padding="8,0,8,12"
+                        ItemsSource="{x:Bind FilteredGames, Mode=OneWay}"
+                        SelectionMode="Single"
+                        SelectionChanged="GamesList_SelectionChanged"
+                        IsItemClickEnabled="True">
+                        <ListView.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.ThemeDictionaries>
+                                    <ResourceDictionary x:Key="Dark">
+                                        <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="#1A22D3EE" />
+                                        <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#14FFFFFF" />
+                                        <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="#2622D3EE" />
+                                        <SolidColorBrush x:Key="ListViewItemCheckHintBrush" Color="Transparent" />
+                                        <SolidColorBrush x:Key="ListViewItemCheckBrush" Color="Transparent" />
+                                        <SolidColorBrush x:Key="ListViewItemSelectionIndicatorBrush" Color="#FF22D3EE" />
+                                    </ResourceDictionary>
+                                    <ResourceDictionary x:Key="Light">
+                                        <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="#1A0891B2" />
+                                        <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#120D1117" />
+                                        <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="#260891B2" />
+                                        <SolidColorBrush x:Key="ListViewItemCheckHintBrush" Color="Transparent" />
+                                        <SolidColorBrush x:Key="ListViewItemCheckBrush" Color="Transparent" />
+                                        <SolidColorBrush x:Key="ListViewItemSelectionIndicatorBrush" Color="#FF0891B2" />
+                                    </ResourceDictionary>
+                                </ResourceDictionary.ThemeDictionaries>
+                            </ResourceDictionary>
+                        </ListView.Resources>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Padding" Value="8,6" />
+                                <Setter Property="Margin" Value="0,1" />
+                                <Setter Property="MinHeight" Value="0" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- thumb 28x42 (2:3) -->
+                                    <Border
+                                        Width="28"
+                                        Height="42"
+                                        VerticalAlignment="Center"
+                                        Background="{ThemeResource BrushSubtle}"
+                                        BorderBrush="#1AFFFFFF"
+                                        BorderThickness="1"
+                                        CornerRadius="3">
+                                        <Grid>
+                                            <c:LucideIcon
+                                                Kind="Gamepad"
+                                                Width="12"
+                                                Height="12"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Stroke="{ThemeResource BrushMutedFg80}"
+                                                StrokeThickness="1.6" />
+                                            <Image FlowDirection="LeftToRight" Source="{Binding Cover}" Stretch="UniformToFill" />
+                                        </Grid>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="1">
+                                        <TextBlock
+                                            FontSize="13"
+                                            FontWeight="Medium"
+                                            Foreground="{ThemeResource BrushForeground}"
+                                            Text="{Binding Name}"
+                                            TextTrimming="CharacterEllipsis" />
+                                        <TextBlock
+                                            FontSize="11"
+                                            Foreground="{ThemeResource BrushMutedForeground}"
+                                            Text="{Binding OverlayLabel}"
+                                            TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+
+                                    <!-- status dot with halo -->
+                                    <Grid Grid.Column="2" Width="14" Height="14" VerticalAlignment="Center">
+                                        <Ellipse
+                                            Fill="{Binding Status, Converter={StaticResource StatusBrush}}"
+                                            Opacity="0.35" />
+                                        <Ellipse
+                                            Width="8"
+                                            Height="8"
+                                            Fill="{Binding Status, Converter={StaticResource StatusBrush}}"
+                                            ToolTipService.ToolTip="{Binding StatusLabel}" />
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Border>
+
+            <!-- ===================== DETAIL ===================== -->
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                <Grid Padding="32" ColumnSpacing="32">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Cover preview -->
+                    <StackPanel Grid.Column="0" Spacing="12">
+                        <Grid Width="208" Height="312" FlowDirection="LeftToRight">
+                            <!-- Inner grid hugs the rendered frame: 208x312 for 2:3,
+                                 208x208 when "Stretch to Square" is on — so the badge
+                                 overlays track the real art bounds instead of clipping
+                                 below a square preview. -->
+                            <Grid
+                                Width="208"
+                                Height="{x:Bind VM.SelectedGame.StretchSquare, Mode=OneWay, Converter={StaticResource BoolToDouble}, ConverterParameter='208|312'}"
+                                VerticalAlignment="Center">
+                                <Ellipse
+                                    Margin="-24"
+                                    Fill="{ThemeResource BrushCoverHalo}" />
+                                <Border
+                                    CornerRadius="8"
+                                    BorderBrush="#0FFFFFFF"
+                                    BorderThickness="1">
+                                    <c:CoverFrame
+                                        Platform="{x:Bind VM.SelectedGame.Platform, Mode=OneWay}"
+                                        CustomTemplateUri="{x:Bind VM.SelectedGame.CustomTemplateUri, Mode=OneWay}"
+                                        Surface="{x:Bind VM.SelectedGame.Surface, Mode=OneWay}"
+                                        StretchSquare="{x:Bind VM.SelectedGame.StretchSquare, Mode=OneWay}"
+                                        CoverUri="{x:Bind VM.SelectedGame.Cover, Mode=OneWay}" />
+                                </Border>
+                                <!-- case badge overlays — matches the icon render:
+                                     ratings bottom-left, seal+dvd centered, pc-cdrom right -->
+                                <Image
+                                    Height="26"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Margin="5,0,0,5"
+                                    Source="ms-appx:///Assets/stickers/sticker_esrb.png"
+                                    Visibility="{x:Bind VM.SelectedGame.StickerEsrb, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
+                                <Image
+                                    Height="26"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Margin="5,0,0,33"
+                                    Source="ms-appx:///Assets/stickers/sticker_pegi18.png"
+                                    Visibility="{x:Bind VM.SelectedGame.StickerPegi18, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    Margin="5"
+                                    Orientation="Horizontal"
+                                    Spacing="3">
+                                    <Image
+                                        Height="22"
+                                        Source="ms-appx:///Assets/stickers/sticker_seal.png"
+                                        Visibility="{x:Bind VM.SelectedGame.StickerSeal, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
+                                    <Image
+                                        Height="22"
+                                        Source="ms-appx:///Assets/stickers/sticker_dvd.png"
+                                        Visibility="{x:Bind VM.SelectedGame.StickerDvd, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
+                                </StackPanel>
+                                <Image
+                                    Height="26"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    Margin="5"
+                                    Source="ms-appx:///Assets/stickers/sticker_pccdrom.png"
+                                    Visibility="{x:Bind VM.SelectedGame.StickerPcCdrom, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
+                            </Grid>
+                        </Grid>
+                        <TextBlock
+                            FontSize="11"
+                            FontWeight="Medium"
+                            CharacterSpacing="140"
+                            Foreground="{ThemeResource BrushMutedFg80}"
+                            Text="{x:Bind VM.Loc.CoverPreview, Mode=OneWay}" />
+                        <TextBlock
+                            FontSize="11"
+                            FontWeight="Medium"
+                            CharacterSpacing="140"
+                            Foreground="{ThemeResource BrushMutedFg80}"
+                            Text="{x:Bind VM.Loc.CaseBadges, Mode=OneWay}" />
+                        <Grid ColumnSpacing="8" RowSpacing="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <CheckBox
+                                Content="PC CD-ROM"
+                                FontSize="12"
+                                IsChecked="{x:Bind VM.SelectedGame.StickerPcCdrom, Mode=TwoWay}" />
+                            <CheckBox
+                                Grid.Column="1"
+                                Content="DVD"
+                                FontSize="12"
+                                IsChecked="{x:Bind VM.SelectedGame.StickerDvd, Mode=TwoWay}" />
+                            <CheckBox
+                                Grid.Row="1"
+                                Content="ESRB"
+                                FontSize="12"
+                                IsChecked="{x:Bind VM.SelectedGame.StickerEsrb, Mode=TwoWay}" />
+                            <CheckBox
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Content="PEGI 18"
+                                FontSize="12"
+                                IsChecked="{x:Bind VM.SelectedGame.StickerPegi18, Mode=TwoWay}" />
+                            <CheckBox
+                                Grid.Row="2"
+                                Content="Seal"
+                                FontSize="12"
+                                IsChecked="{x:Bind VM.SelectedGame.StickerSeal, Mode=TwoWay}" />
+                            <CheckBox
+                                Grid.Row="3"
+                                Grid.ColumnSpan="2"
+                                Margin="0,2,0,0"
+                                FontSize="12"
+                                FontWeight="Medium"
+                                Content="{x:Bind VM.Loc.StretchSquareLabel, Mode=OneWay}"
+                                IsChecked="{x:Bind VM.SelectedGame.StretchSquare, Mode=TwoWay}" />
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Info column -->
+                    <StackPanel Grid.Column="1" Spacing="24" VerticalAlignment="Top">
+
+                        <!-- Name + status pill -->
+                        <StackPanel Spacing="12">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <TextBlock
+                                    FontSize="30"
+                                    FontWeight="SemiBold"
+                                    Foreground="{ThemeResource BrushForeground}"
+                                    Text="{x:Bind VM.SelectedGame.Name, Mode=OneWay}"
+                                    TextWrapping="Wrap" />
+                                <Border
+                                    Padding="8,2"
+                                    VerticalAlignment="Center"
+                                    Background="{x:Bind VM.SelectedGame.Status, Mode=OneWay, Converter={StaticResource StatusTint}}"
+                                    BorderBrush="{x:Bind VM.SelectedGame.Status, Mode=OneWay, Converter={StaticResource StatusBorder}}"
+                                    BorderThickness="1"
+                                    CornerRadius="999">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Ellipse
+                                            Width="6"
+                                            Height="6"
+                                            VerticalAlignment="Center"
+                                            Fill="{x:Bind VM.SelectedGame.Status, Mode=OneWay, Converter={StaticResource StatusBrush}}" />
+                                        <TextBlock
+                                            FontSize="11"
+                                            FontWeight="Medium"
+                                            Foreground="{x:Bind VM.SelectedGame.Status, Mode=OneWay, Converter={StaticResource StatusBrush}}"
+                                            Text="{x:Bind VM.SelectedGame.StatusLabel, Mode=OneWay}" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Metadata -->
+                            <Grid RowSpacing="8" ColumnSpacing="24">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock
+                                    Grid.Row="0"
+                                    FontSize="12"
+                                    Foreground="{ThemeResource BrushMutedForeground}"
+                                    Text="{x:Bind VM.Loc.ShortcutLabel, Mode=OneWay}" />
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    FontFamily="Cascadia Mono, Consolas"
+                                    FontSize="11"
+                                    Foreground="{ThemeResource BrushForeground85}"
+                                    Text="{x:Bind VM.SelectedGame.Shortcut, Mode=OneWay}"
+                                    TextTrimming="CharacterEllipsis" />
+
+                                <TextBlock
+                                    Grid.Row="1"
+                                    FontSize="12"
+                                    Foreground="{ThemeResource BrushMutedForeground}"
+                                    Text="{x:Bind VM.Loc.CoverSourceLabel, Mode=OneWay}" />
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    FontSize="12"
+                                    Foreground="{ThemeResource BrushForeground85}"
+                                    Text="{x:Bind VM.SelectedGame.Source, Mode=OneWay}" />
+
+                                <TextBlock
+                                    Grid.Row="2"
+                                    FontSize="12"
+                                    Foreground="{ThemeResource BrushMutedForeground}"
+                                    Text="{x:Bind VM.Loc.MatchConfidence, Mode=OneWay}" />
+                                <StackPanel
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Spacing="10">
+                                    <Grid Width="112" Height="4" VerticalAlignment="Center">
+                                        <Border
+                                            Background="{ThemeResource BrushSubtleHover}"
+                                            CornerRadius="2" />
+                                        <Border
+                                            Width="{x:Bind VM.SelectedGame.Confidence, Mode=OneWay, Converter={StaticResource PctWidth}, ConverterParameter=112}"
+                                            HorizontalAlignment="Left"
+                                            Background="{x:Bind VM.SelectedGame.IsMatched, Mode=OneWay, Converter={StaticResource BoolRes}, ConverterParameter='BrushPrimary|BrushStatusWarn'}"
+                                            CornerRadius="2" />
+                                    </Grid>
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="{ThemeResource BrushForeground85}">
+                                        <Run Text="{x:Bind VM.SelectedGame.Confidence, Mode=OneWay}" /><Run Text="%" />
+                                    </TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Platform template picker -->
+                        <StackPanel Spacing="12">
+                            <Grid>
+                                <TextBlock
+                                    Style="{ThemeResource SectionHeadingStyle}"
+                                    Text="{x:Bind VM.Loc.PlatformHeading, Mode=OneWay}" />
+                                <TextBlock
+                                    HorizontalAlignment="Right"
+                                    FontSize="11"
+                                    Foreground="{ThemeResource BrushMutedFg80}"
+                                    Text="{x:Bind VM.Loc.PickTemplate, Mode=OneWay}" />
+                            </Grid>
+
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Spacing="8">
+                            <ComboBox
+                                x:Name="PlatformCombo"
+                                MinWidth="280"
+                                HorizontalAlignment="Left"
+                                Padding="10,6"
+                                CornerRadius="8"
+                                FontSize="12"
+                                SelectionChanged="PlatformCombo_SelectionChanged">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Spacing="10">
+                                            <Border
+                                                Width="22"
+                                                Height="33"
+                                                CornerRadius="3"
+                                                Background="{ThemeResource BrushSubtle}"
+                                                BorderBrush="#22FFFFFF"
+                                                BorderThickness="1">
+                                                <Grid>
+                                                    <c:LucideIcon
+                                                        Kind="Gamepad"
+                                                        Width="12"
+                                                        Height="12"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Stroke="{ThemeResource BrushMutedFg80}"
+                                                        StrokeThickness="1.6"
+                                                        Visibility="{Binding ShowGlyph, Converter={StaticResource BoolToVis}}" />
+                                                    <Image
+                                                        FlowDirection="LeftToRight"
+                                                        Source="{Binding Thumb}"
+                                                        Stretch="UniformToFill" />
+                                                </Grid>
+                                            </Border>
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                Foreground="{ThemeResource BrushForeground}"
+                                                Text="{Binding Label}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <Button
+                                VerticalAlignment="Center"
+                                Padding="9"
+                                CornerRadius="8"
+                                ToolTipService.ToolTip="{x:Bind VM.Loc.BrowseTemplateTip, Mode=OneWay}"
+                                Click="BrowseTemplate_Click">
+                                <c:LucideIcon
+                                    Kind="ImageUp"
+                                    Width="16"
+                                    Height="16"
+                                    Stroke="{ThemeResource BrushForeground}"
+                                    StrokeThickness="1.8" />
+                            </Button>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Surface finish picker — exclusive choice -->
+                        <StackPanel Spacing="12">
+                            <Grid>
+                                <TextBlock
+                                    Style="{ThemeResource SectionHeadingStyle}"
+                                    Text="{x:Bind VM.Loc.SurfaceHeading, Mode=OneWay}" />
+                                <TextBlock
+                                    HorizontalAlignment="Right"
+                                    FontSize="11"
+                                    Foreground="{ThemeResource BrushMutedFg80}"
+                                    Text="{x:Bind VM.Loc.PickSurface, Mode=OneWay}" />
+                            </Grid>
+
+                            <RadioButtons
+                                x:Name="SurfaceButtons"
+                                MaxColumns="5"
+                                SelectionChanged="SurfaceButtons_SelectionChanged">
+                                <RadioButtons.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="12" Text="{Binding}" />
+                                    </DataTemplate>
+                                </RadioButtons.ItemTemplate>
+                            </RadioButtons>
+                        </StackPanel>
+
+                        <!-- Action buttons -->
+                        <StackPanel Spacing="8">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Button
+                                    Height="32"
+                                    Padding="12,0"
+                                    Background="{ThemeResource BrushPrimaryTint}"
+                                    BorderBrush="{ThemeResource BrushPrimaryBorder}"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    FontSize="12"
+                                    FontWeight="Medium"
+                                    Foreground="{ThemeResource BrushPrimary}"
+                                    Click="ChooseCover_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <c:LucideIcon
+                                            Kind="CloudDownload"
+                                            Width="14"
+                                            Height="14"
+                                            Stroke="{ThemeResource BrushPrimary}"
+                                            StrokeThickness="1.8" />
+                                        <TextBlock Text="{x:Bind VM.Loc.BtnChooseCover, Mode=OneWay}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    Height="32"
+                                    Padding="12,0"
+                                    Style="{ThemeResource GhostButtonStyle}"
+                                    Click="MarkWrong_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <c:LucideIcon
+                                            Kind="Flag"
+                                            Width="14"
+                                            Height="14"
+                                            Stroke="{ThemeResource BrushForeground90}"
+                                            StrokeThickness="1.8" />
+                                        <TextBlock Text="{x:Bind VM.Loc.BtnWrongGame, Mode=OneWay}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    Height="32"
+                                    Padding="12,0"
+                                    Style="{ThemeResource GhostButtonStyle}"
+                                    Click="RemoveIcon_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <c:LucideIcon
+                                            Kind="RotateCcw"
+                                            Width="14"
+                                            Height="14"
+                                            Stroke="{ThemeResource BrushForeground90}"
+                                            StrokeThickness="1.8" />
+                                        <TextBlock Text="{x:Bind VM.Loc.BtnRemoveIcon, Mode=OneWay}" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Button
+                                    Height="32"
+                                    Padding="12,0"
+                                    Style="{ThemeResource GhostButtonStyle}"
+                                    Click="GoogleSearch_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <c:LucideIcon
+                                            Kind="Search"
+                                            Width="14"
+                                            Height="14"
+                                            Stroke="{ThemeResource BrushForeground90}"
+                                            StrokeThickness="1.8" />
+                                        <TextBlock Text="{x:Bind VM.Loc.BtnGoogle, Mode=OneWay}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    Height="32"
+                                    Padding="12,0"
+                                    Style="{ThemeResource GhostButtonStyle}"
+                                    Click="AiGenerate_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <c:LucideIcon
+                                            Kind="Sparkles"
+                                            Width="14"
+                                            Height="14"
+                                            Stroke="{ThemeResource BrushForeground90}"
+                                            StrokeThickness="1.8" />
+                                        <TextBlock Text="{x:Bind VM.Loc.BtnAiGenerate, Mode=OneWay}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    Height="32"
+                                    Padding="12,0"
+                                    Style="{ThemeResource GhostButtonStyle}"
+                                    Click="PasteCover_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <c:LucideIcon
+                                            Kind="Clipboard"
+                                            Width="14"
+                                            Height="14"
+                                            Stroke="{ThemeResource BrushForeground90}"
+                                            StrokeThickness="1.8" />
+                                        <TextBlock Text="{x:Bind VM.Loc.BtnPaste, Mode=OneWay}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    Height="32"
+                                    Padding="12,0"
+                                    Style="{ThemeResource GhostButtonStyle}"
+                                    Click="BrowseCover_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <c:LucideIcon
+                                            Kind="FolderOpen"
+                                            Width="14"
+                                            Height="14"
+                                            Stroke="{ThemeResource BrushForeground90}"
+                                            StrokeThickness="1.8" />
+                                        <TextBlock Text="{x:Bind VM.Loc.BtnBrowse, Mode=OneWay}" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Alternative covers gallery (SteamGridDB) -->
+                        <StackPanel Spacing="10">
+                            <Grid>
+                                <TextBlock
+                                    Style="{ThemeResource SectionHeadingStyle}"
+                                    Text="{x:Bind VM.Loc.AltCovers, Mode=OneWay}" />
+                                <TextBlock
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    FontSize="11"
+                                    Foreground="{ThemeResource BrushMutedFg80}">
+                                    <Run Text="{x:Bind VM.SelectedGame.CoverOptionsCount, Mode=OneWay}" /><Run Text="{x:Bind VM.Loc.AltCoversSuffix, Mode=OneWay}" />
+                                </TextBlock>
+                            </Grid>
+                            <Grid>
+                                <ListView
+                                    ItemsSource="{x:Bind VM.SelectedGame.CoverOptions, Mode=OneWay}"
+                                    IsItemClickEnabled="True"
+                                    SelectionMode="None"
+                                    ItemClick="AltCovers_ItemClick"
+                                    ScrollViewer.HorizontalScrollMode="Enabled"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                    ScrollViewer.VerticalScrollMode="Disabled"
+                                    Visibility="{x:Bind VM.SelectedGame.CoverOptionsCount, Mode=OneWay, Converter={StaticResource CountToVis}}">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Padding" Value="0" />
+                                            <Setter Property="Margin" Value="0,0,8,0" />
+                                            <Setter Property="MinWidth" Value="0" />
+                                            <Setter Property="MinHeight" Value="0" />
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border
+                                                Width="72"
+                                                Height="108"
+                                                BorderBrush="#26FFFFFF"
+                                                BorderThickness="1"
+                                                CornerRadius="5"
+                                                ToolTipService.ToolTip="{Binding Label}">
+                                                <Image FlowDirection="LeftToRight" Source="{Binding Thumb}" Stretch="UniformToFill" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{ThemeResource BrushMutedForeground}"
+                                    Text="{x:Bind VM.Loc.AltCoversEmpty, Mode=OneWay}"
+                                    TextWrapping="Wrap"
+                                    Visibility="{x:Bind VM.SelectedGame.CoverOptionsCount, Mode=OneWay, Converter={StaticResource CountToVis}, ConverterParameter='invert'}" />
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- ===================== FOOTER ===================== -->
+        <Grid
+            Grid.Row="1"
+            Padding="16,0"
+            Background="{ThemeResource BrushTitlebar}"
+            BorderBrush="{ThemeResource BrushBorder}"
+            BorderThickness="0,1,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="8"
+                VerticalAlignment="Center">
+
+                <!-- LIVE -->
+                <StackPanel
+                    Margin="0,0,4,0"
+                    Orientation="Horizontal"
+                    Spacing="6"
+                    VerticalAlignment="Center">
+                    <Grid Width="10" Height="10">
+                        <Ellipse Fill="{ThemeResource BrushStatusOk}" Opacity="0.4">
+                            <Ellipse.RenderTransform>
+                                <ScaleTransform x:Name="LivePing" CenterX="5" CenterY="5" />
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                        <Ellipse
+                            Width="6"
+                            Height="6"
+                            Fill="{ThemeResource BrushStatusOk}" />
+                    </Grid>
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="10"
+                        FontWeight="SemiBold"
+                        CharacterSpacing="140"
+                        Foreground="{ThemeResource BrushStatusOk}"
+                        Text="{x:Bind VM.Loc.Live, Mode=OneWay}" />
+                </StackPanel>
+
+                <!-- Stat: Processed -->
+                <Border
+                    Height="40"
+                    Padding="12,0"
+                    Background="{ThemeResource BrushSubtle}"
+                    BorderBrush="{ThemeResource BrushBorder}"
+                    BorderThickness="1"
+                    CornerRadius="6">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <c:LucideIcon
+                            Kind="Layers"
+                            Width="14"
+                            Height="14"
+                            Stroke="{ThemeResource BrushForeground85}"
+                            StrokeThickness="1.8" />
+                        <StackPanel VerticalAlignment="Center" Spacing="1">
+                            <TextBlock
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Foreground="{ThemeResource BrushForeground}"
+                                LineHeight="16"
+                                Text="{x:Bind VM.Processed, Mode=OneWay}" />
+                            <TextBlock
+                                FontSize="10"
+                                Foreground="{ThemeResource BrushMutedForeground}"
+                                LineHeight="12"
+                                Text="{x:Bind VM.Loc.ProcessedLabel, Mode=OneWay}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Stat: Matched -->
+                <Border
+                    Height="40"
+                    Padding="12,0"
+                    Background="{ThemeResource BrushSubtle}"
+                    BorderBrush="{ThemeResource BrushBorder}"
+                    BorderThickness="1"
+                    CornerRadius="6">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <c:LucideIcon
+                            Kind="CheckCircle"
+                            Width="14"
+                            Height="14"
+                            Stroke="{ThemeResource BrushStatusOk}"
+                            StrokeThickness="1.8" />
+                        <StackPanel VerticalAlignment="Center" Spacing="1">
+                            <TextBlock
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Foreground="{ThemeResource BrushForeground}"
+                                LineHeight="16"
+                                Text="{x:Bind VM.Matched, Mode=OneWay}" />
+                            <TextBlock
+                                FontSize="10"
+                                Foreground="{ThemeResource BrushMutedForeground}"
+                                LineHeight="12"
+                                Text="{x:Bind VM.Loc.MatchedLabel, Mode=OneWay}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Stat: Attention -->
+                <Border
+                    Height="40"
+                    Padding="12,0"
+                    Background="{ThemeResource BrushSubtle}"
+                    BorderBrush="{ThemeResource BrushBorder}"
+                    BorderThickness="1"
+                    CornerRadius="6">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <c:LucideIcon
+                            Kind="AlertTriangle"
+                            Width="14"
+                            Height="14"
+                            Stroke="{ThemeResource BrushStatusWarn}"
+                            StrokeThickness="1.8" />
+                        <StackPanel VerticalAlignment="Center" Spacing="1">
+                            <TextBlock
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Foreground="{ThemeResource BrushForeground}"
+                                LineHeight="16"
+                                Text="{x:Bind VM.AttentionCount, Mode=OneWay}" />
+                            <TextBlock
+                                FontSize="10"
+                                Foreground="{ThemeResource BrushMutedForeground}"
+                                LineHeight="12"
+                                Text="{x:Bind VM.Loc.AttentionLabel, Mode=OneWay}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Stat: Success rate -->
+                <Border
+                    Height="40"
+                    Padding="12,0"
+                    Background="{ThemeResource BrushSubtle}"
+                    BorderBrush="{ThemeResource BrushBorder}"
+                    BorderThickness="1"
+                    CornerRadius="6">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <c:LucideIcon
+                            Kind="TrendingUp"
+                            Width="14"
+                            Height="14"
+                            Stroke="{ThemeResource BrushPrimary}"
+                            StrokeThickness="1.8" />
+                        <StackPanel VerticalAlignment="Center" Spacing="1">
+                            <TextBlock
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Foreground="{ThemeResource BrushForeground}"
+                                LineHeight="16"
+                                Text="{x:Bind VM.SuccessRateLabel, Mode=OneWay}" />
+                            <TextBlock
+                                FontSize="10"
+                                Foreground="{ThemeResource BrushMutedForeground}"
+                                LineHeight="12"
+                                Text="{x:Bind VM.Loc.SuccessRateLabel, Mode=OneWay}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- Apply & Build -->
+            <Button
+                Grid.Column="1"
+                Height="40"
+                Padding="20,0"
+                VerticalAlignment="Center"
+                Background="{ThemeResource BrushBrandGradient}"
+                BorderThickness="0"
+                CornerRadius="8"
+                FontSize="14"
+                FontWeight="SemiBold"
+                Foreground="{ThemeResource BrushPrimaryForeground}"
+                IsEnabled="{x:Bind VM.IsBuilding, Mode=OneWay, Converter={StaticResource InverseBool}}"
+                Click="Build_Click">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <c:LucideIcon
+                        Kind="Zap"
+                        Width="16"
+                        Height="16"
+                        Stroke="{ThemeResource BrushPrimaryForeground}" />
+                    <TextBlock Text="{x:Bind VM.Loc.BtnBuild, Mode=OneWay}" />
+                </StackPanel>
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

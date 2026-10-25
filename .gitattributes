@@ -1,0 +1,20 @@
+# BoxArt Studio is a C# / XAML (WinUI 3) project — keep GitHub's
+# language stats focused on the real source, not shipped artifacts.
+
+*.cs    linguist-language=C#
+*.xaml  linguist-language=XAML
+
+# Installer script, docs, and legacy dumps don't represent the codebase.
+*.iss   linguist-vendored
+*.txt   linguist-vendored
+*.md    linguist-documentation
+
+# Binaries and packaged release artifacts.
+*.exe   binary linguist-vendored
+*.zip   binary linguist-vendored
+*.pdb   binary linguist-vendored
+*.ico   binary
+*.png   binary
+*.jpg   binary
+*.webp  binary
+*.resw  linguist-language=XML

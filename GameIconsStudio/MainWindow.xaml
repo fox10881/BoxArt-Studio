@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="GameIconsStudio.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:GameIconsStudio.Controls"
+    xmlns:local="using:GameIconsStudio">
+
+    <Grid x:Name="Root" RequestedTheme="Dark">
+        <!-- Base + ambient mica washes (mirrors .mica radial gradients) -->
+        <Grid Background="{ThemeResource BrushBackground}">
+            <Rectangle Fill="{ThemeResource BrushMicaPurpleWash}" />
+            <Rectangle Fill="{ThemeResource BrushMicaCyanWash}" />
+        </Grid>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="46" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- ============ TITLE BAR (44px + 2px progress) ============ -->
+            <Grid
+                Height="46"
+                Background="{ThemeResource BrushTitlebar}"
+                BorderBrush="{ThemeResource BrushBorder}"
+                BorderThickness="0,0,0,1">
+
+                <!-- Drag surface (behind everything) -->
+                <Grid x:Name="TitleBarDragArea" Background="Transparent" />
+
+                <Grid Margin="14,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left cluster -->
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Spacing="10"
+                        VerticalAlignment="Center">
+                        <!-- App logo -->
+                        <Viewbox Width="20" Height="20">
+                            <Grid Width="24" Height="24">
+                                <Border
+                                    Width="8.5"
+                                    Height="12.75"
+                                    Margin="2,3,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    CornerRadius="1.75"
+                                    Background="{ThemeResource BrushBrandGradientVertical}" />
+                                <Border
+                                    Width="8.5"
+                                    Height="12.75"
+                                    Margin="13.5,3,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    CornerRadius="1.75"
+                                    Background="{ThemeResource BrushBrandGradientVertical}"
+                                    Opacity="0.55" />
+                                <Border
+                                    Width="20"
+                                    Height="3"
+                                    Margin="2,18,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    CornerRadius="1.5"
+                                    Background="{ThemeResource BrushBrandGradientVertical}"
+                                    Opacity="0.8" />
+                            </Grid>
+                        </Viewbox>
+
+                        <TextBlock
+                            Text="{x:Bind VM.Loc.AppTitle, Mode=OneWay}"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            FontWeight="Medium"
+                            Foreground="{ThemeResource BrushForeground90}" />
+
+                        <Border
+                            x:Name="BackDivider"
+                            Width="1"
+                            Height="16"
+                            VerticalAlignment="Center"
+                            Background="{ThemeResource BrushBorder}"
+                            Visibility="Collapsed" />
+
+                        <Button
+                            x:Name="BackButton"
+                            Height="28"
+                            Padding="8,0"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            CornerRadius="6"
+                            FontSize="12"
+                            FontWeight="Medium"
+                            Foreground="{ThemeResource BrushMutedForeground}"
+                            Visibility="Collapsed"
+                            Click="BackButton_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <c:LucideIcon
+                                    Kind="ArrowLeft"
+                                    Width="14"
+                                    Height="14"
+                                    Stroke="{ThemeResource BrushMutedForeground}"
+                                    StrokeThickness="2" />
+                                <TextBlock Text="{x:Bind VM.Loc.BackHome, Mode=OneWay}" />
+                            </StackPanel>
+                        </Button>
+
+                        <Border
+                            x:Name="ModeChip"
+                            Padding="8,2"
+                            VerticalAlignment="Center"
+                            Background="{ThemeResource BrushPrimaryTint}"
+                            BorderBrush="{ThemeResource BrushPrimaryBorderSoft}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Visibility="Collapsed">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="11"
+                                    FontWeight="Medium"
+                                    Foreground="{ThemeResource BrushPrimary}"
+                                    Opacity="0.7"
+                                    Text="{x:Bind VM.Loc.ModeLabel, Mode=OneWay}" />
+                                <TextBlock
+                                    x:Name="ModeChipText"
+                                    VerticalAlignment="Center"
+                                    FontSize="11"
+                                    FontWeight="Medium"
+                                    Foreground="{ThemeResource BrushPrimary}"
+                                    Text="Shortcuts Folder" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Right cluster -->
+                    <StackPanel
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Stretch">
+
+                        <Button
+                            x:Name="DebugButton"
+                            Width="28"
+                            Height="28"
+                            Margin="0,0,4,0"
+                            Padding="0"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            CornerRadius="6"
+                            ToolTipService.ToolTip="{x:Bind VM.Loc.DebugTooltip, Mode=OneWay}"
+                            Click="DebugButton_Click">
+                            <c:LucideIcon
+                                Kind="Bug"
+                                Width="15"
+                                Height="15"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Stroke="{ThemeResource BrushForeground85}"
+                                StrokeThickness="1.8" />
+                        </Button>
+
+                        <Button
+                            x:Name="SettingsButton"
+                            Width="28"
+                            Height="28"
+                            Margin="0,0,4,0"
+                            Padding="0"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            CornerRadius="6"
+                            ToolTipService.ToolTip="{x:Bind VM.Loc.SettingsTooltip, Mode=OneWay}"
+                            Click="SettingsButton_Click">
+                            <c:LucideIcon
+                                Kind="Settings"
+                                Width="15"
+                                Height="15"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Stroke="{ThemeResource BrushForeground85}"
+                                StrokeThickness="1.8" />
+                        </Button>
+
+                        <Button
+                            x:Name="RepairButton"
+                            Height="28"
+                            Margin="0,0,8,0"
+                            Padding="10,0"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            CornerRadius="6"
+                            FontSize="12"
+                            FontWeight="Medium"
+                            Foreground="{ThemeResource BrushForeground85}"
+                            Click="RepairButton_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <c:LucideIcon
+                                    Kind="Wrench"
+                                    Width="14"
+                                    Height="14"
+                                    Stroke="{ThemeResource BrushForeground85}"
+                                    StrokeThickness="1.8" />
+                                <TextBlock Text="{x:Bind VM.Loc.RepairTitle, Mode=OneWay}" />
+                            </StackPanel>
+                        </Button>
+
+                        <Border
+                            Width="1"
+                            Height="16"
+                            Margin="4,0"
+                            VerticalAlignment="Center"
+                            Background="{ThemeResource BrushBorder}" />
+
+                        <Button
+                            Height="28"
+                            Margin="4,0,0,0"
+                            Padding="10,0"
+                            VerticalAlignment="Center"
+                            Click="LanguageButton_Click"
+                            Background="{ThemeResource BrushSubtle}"
+                            BorderBrush="{ThemeResource BrushBorder}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            FontSize="12"
+                            FontWeight="Medium"
+                            Foreground="{ThemeResource BrushForeground90}">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <c:LucideIcon
+                                    Kind="Globe"
+                                    Width="14"
+                                    Height="14"
+                                    Stroke="{ThemeResource BrushPrimary}"
+                                    StrokeThickness="1.8" />
+                                <TextBlock Text="{x:Bind VM.Loc.LangButton, Mode=OneWay}" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button
+                            x:Name="ThemeButton"
+                            Width="28"
+                            Height="28"
+                            Margin="4,0,8,0"
+                            Padding="0"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            CornerRadius="6"
+                            Click="ThemeButton_Click">
+                            <c:LucideIcon
+                                x:Name="ThemeIcon"
+                                Kind="Sun"
+                                Width="16"
+                                Height="16"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Stroke="{ThemeResource BrushForeground85}"
+                                StrokeThickness="1.8" />
+                        </Button>
+
+                        <!-- Caption buttons -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
+                            <Button
+                                Width="46"
+                                Padding="0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Click="Minimize_Click">
+                                <c:LucideIcon
+                                    Kind="Minus"
+                                    Width="16"
+                                    Height="16"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Stroke="{ThemeResource BrushForeground85}"
+                                    StrokeThickness="1.4" />
+                            </Button>
+                            <Button
+                                Width="46"
+                                Padding="0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Click="Maximize_Click">
+                                <c:LucideIcon
+                                    Kind="Square"
+                                    Width="12"
+                                    Height="12"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Stroke="{ThemeResource BrushForeground85}"
+                                    StrokeThickness="1.4" />
+                            </Button>
+                            <Button
+                                Width="46"
+                                Padding="0"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Click="Close_Click">
+                                <Button.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.ThemeDictionaries>
+                                            <ResourceDictionary x:Key="Dark">
+                                                <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FFC42B1C" />
+                                                <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White" />
+                                            </ResourceDictionary>
+                                        </ResourceDictionary.ThemeDictionaries>
+                                    </ResourceDictionary>
+                                </Button.Resources>
+                                <c:LucideIcon
+                                    Kind="Close"
+                                    Width="16"
+                                    Height="16"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Stroke="{ThemeResource BrushForeground85}"
+                                    StrokeThickness="1.4" />
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Build progress rail (bottom 2px of header) -->
+                <Grid
+                    Height="2"
+                    VerticalAlignment="Bottom"
+                    Margin="0,-1,0,-1">
+                    <Border
+                        x:Name="ProgressFill"
+                        HorizontalAlignment="Left"
+                        Width="0"
+                        Background="{ThemeResource BrushBrandGradient}"
+                        Opacity="0" />
+                </Grid>
+            </Grid>
+
+            <!-- ============ CONTENT ============ -->
+            <ContentPresenter x:Name="ContentHost" Grid.Row="1" />
+
+            <!-- ============ TOAST ============ -->
+            <Border
+                x:Name="ToastHost"
+                Grid.Row="1"
+                Width="320"
+                Margin="16"
+                Padding="12"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Background="{ThemeResource BrushPopover}"
+                BorderBrush="{ThemeResource BrushBorder}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Translation="0,-64,0"
+                Visibility="Collapsed">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        x:Name="ToastIconWrap"
+                        Width="32"
+                        Height="32"
+                        VerticalAlignment="Top"
+                        Background="{ThemeResource BrushPrimaryTint}"
+                        CornerRadius="6">
+                        <c:LucideIcon
+                            x:Name="ToastIcon"
+                            Kind="Wrench"
+                            Width="16"
+                            Height="16"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Stroke="{ThemeResource BrushPrimary}"
+                            StrokeThickness="1.8" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="12,2,0,0" Spacing="2">
+                        <TextBlock
+                            x:Name="ToastTitle"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            Foreground="{ThemeResource BrushForeground}" />
+                        <TextBlock
+                            x:Name="ToastBody"
+                            FontSize="12"
+                            Foreground="{ThemeResource BrushMutedForeground}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                    <Button
+                        Grid.Column="2"
+                        Width="24"
+                        Height="24"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        CornerRadius="4"
+                        Click="ToastDismiss_Click">
+                        <c:LucideIcon
+                            Kind="Close"
+                            Width="14"
+                            Height="14"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Stroke="{ThemeResource BrushMutedForeground}"
+                            StrokeThickness="2" />
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
