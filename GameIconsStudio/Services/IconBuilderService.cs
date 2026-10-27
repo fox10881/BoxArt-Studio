@@ -722,14 +722,78 @@ public sealed class IconBuilderService : IDisposable
     }
 
     /// <summary>Overwrite a .lnk's IconLocation via IShellLinkW and save.</summary>
-    private static void SetShortcutIcon(string lnkPath, string icoPath) =>
-        // Shell COM objects are kept on a dedicated STA thread.
-        RunOnSta(() =>
+    private static void SetShortcutIcon(string lnkPath, string icoPath)
+    {
+        try
         {
-            using var lnk = ShellShortcut.Open(lnkPath);
-            lnk.IconLocation = $"{icoPath},0";
-            lnk.Save();
-        });
+            // Shell COM objects are kept on a dedicated STA thread.
+            RunOnSta(() =>
+            {
+                using var lnk = ShellShortcut.Open(lnkPath);
+                lnk.IconLocation = $"{icoPath},0";
+                lnk.Save();
+            });
+        }
+        catch (Exception ex) when (IsAccessDenied(ex))
+        {
+            SaveShortcutElevated(lnkPath, lnk => lnk.IconLocation = $"{icoPath},0");
+        }
+    }
+
+    /// <summary>
+    /// Per-operation elevation for .lnk files in admin-only locations
+    /// (e.g. Public Desktop): rebuild the modified shortcut in %TEMP%, then
+    /// a one-shot elevated `copy` puts it back. UAC fires only at this
+    /// moment — the app itself stays unelevated so drag-and-drop works.
+    /// </summary>
+    private static void SaveShortcutElevated(string lnkPath, Action<ShellShortcut> mutate)
+    {
+        var tempPath = Path.Combine(Path.GetTempPath(), $"BoxArtStudio_{Guid.NewGuid():N}.lnk");
+        try
+        {
+            // Read access is enough to copy the protected .lnk out; mutate
+            // and save the temp copy so any Save() inside `mutate` writes
+            // to a user-writable path.
+            File.Copy(lnkPath, tempPath, overwrite: true);
+            RunOnSta(() =>
+            {
+                using var lnk = ShellShortcut.Open(tempPath);
+                mutate(lnk);
+                lnk.Save();
+            });
+
+            Process proc;
+            try
+            {
+                proc = Process.Start(new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/c copy /Y \"{tempPath}\" \"{lnkPath}\"",
+                    UseShellExecute = true,
+                    Verb = "runas",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                }) ?? throw new IOException("Elevated copy could not be started.");
+            }
+            catch (System.ComponentModel.Win32Exception ex) when (ex.NativeErrorCode == 1223)
+            {
+                throw new UnauthorizedAccessException("Elevation declined by the user.", ex);
+            }
+
+            proc.WaitForExit();
+            if (proc.ExitCode != 0)
+                throw new IOException($"Elevated copy failed (exit code {proc.ExitCode})");
+            Log($"lnk saved via elevation: {lnkPath}");
+        }
+        finally
+        {
+            try { File.Delete(tempPath); } catch { }
+        }
+    }
+
+    /// <summary>Access-denied from either the file system or COM HRESULT.</summary>
+    private static bool IsAccessDenied(Exception ex) =>
+        ex is UnauthorizedAccessException ||
+        ex is COMException { HResult: unchecked((int)0x80070005) or unchecked((int)0x80030005) };
 
     private static void RunOnSta(Action action)
     {
@@ -877,37 +941,51 @@ public sealed class IconBuilderService : IDisposable
     /// be rejected, so the reliable "remove" is pointing it back at the
     /// shortcut's own target executable.
     /// </summary>
-    private static void ClearShortcutIcon(string lnkPath) =>
-        RunOnSta(() =>
+    private static void ClearShortcutIcon(string lnkPath)
+    {
+        try
         {
-            using var lnk = ShellShortcut.Open(lnkPath);
-            var target = lnk.TargetPath;
-
-            // The setter validates the value: "" may throw E_INVALIDARG, and
-            // URL-style shortcuts have an empty TargetPath. Try the cleanest
-            // revert first, then degrade.
-            var attempts = new List<string>
+            RunOnSta(() =>
             {
-                "",                                                   // true clear
-                $"{target},0",                                        // target's own icon
-            };
-            if (string.IsNullOrWhiteSpace(target))
-                attempts.Add(@"%SystemRoot%\system32\shell32.dll,0"); // stock document icon
+                using var lnk = ShellShortcut.Open(lnkPath);
+                ClearIconLocation(lnk, lnkPath);
+            });
+        }
+        catch (Exception ex) when (IsAccessDenied(ex))
+        {
+            SaveShortcutElevated(lnkPath, lnk => ClearIconLocation(lnk, lnkPath));
+        }
+    }
 
-            Exception? lastError = null;
-            foreach (var attempt in attempts)
+    private static void ClearIconLocation(ShellShortcut lnk, string lnkPath)
+    {
+        var target = lnk.TargetPath;
+
+        // The setter validates the value: "" may throw E_INVALIDARG, and
+        // URL-style shortcuts have an empty TargetPath. Try the cleanest
+        // revert first, then degrade.
+        var attempts = new List<string>
+        {
+            "",                                                   // true clear
+            $"{target},0",                                        // target's own icon
+        };
+        if (string.IsNullOrWhiteSpace(target))
+            attempts.Add(@"%SystemRoot%\system32\shell32.dll,0"); // stock document icon
+
+        Exception? lastError = null;
+        foreach (var attempt in attempts)
+        {
+            try
             {
-                try
-                {
-                    lnk.IconLocation = attempt;
-                    lnk.Save();
-                    Log($"lnk icon reverted: {lnkPath} -> '{attempt}'");
-                    return;
-                }
-                catch (Exception ex) { lastError = ex; }
+                lnk.IconLocation = attempt;
+                lnk.Save();
+                Log($"lnk icon reverted: {lnkPath} -> '{attempt}'");
+                return;
             }
-            throw lastError ?? new InvalidOperationException("IconLocation could not be cleared.");
-        });
+            catch (Exception ex) { lastError = ex; }
+        }
+        throw lastError ?? new InvalidOperationException("IconLocation could not be cleared.");
+    }
 
     // ---------------- shell refresh ----------------
 

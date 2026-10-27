@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.UI;
@@ -68,7 +69,7 @@ public sealed partial class MainWindow : Window
         _home = new HomeView { VM = _vm };
         _home.ModeSelected += OnModeSelected;
         _home.RepairRequested += OnRepairRequested;
-        _home.DesktopMenuRequested += OnDesktopMenuRequested;
+        _home.ShortcutDropped += path => _ = QuickLoadShortcutAsync(path);
 
         _studio = new StudioView { VM = _vm };
         _studio.BuildRequested += OnBuildRequested;
@@ -194,40 +195,7 @@ public sealed partial class MainWindow : Window
         return (results, folder.Path);
     }
 
-    /// <summary>
-    /// "Desktop Games" quick menu: fills the flyout with every .lnk on the
-    /// merged Desktop (user + Public), sorted alphabetically. Bypasses the
-    /// OS picker's single-location Desktop view entirely.
-    /// </summary>
-    private async void OnDesktopMenuRequested(MenuFlyout menu)
-    {
-        menu.Items.Clear();
-        menu.Items.Add(new MenuFlyoutItem { Text = _vm.Loc.DesktopMenuLoading, IsEnabled = false });
-
-        var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        var shortcuts = await _scanner.ScanFolderAsync(desktop, recursive: false);
-
-        menu.Items.Clear();
-        if (shortcuts.Count == 0)
-        {
-            menu.Items.Add(new MenuFlyoutItem { Text = _vm.Loc.DesktopMenuEmpty, IsEnabled = false });
-            return;
-        }
-
-        foreach (var s in shortcuts.OrderBy(x => x.Name, StringComparer.CurrentCultureIgnoreCase))
-        {
-            var path = s.Path;
-            var item = new MenuFlyoutItem
-            {
-                Text = s.Name,
-                Icon = new FontIcon { Glyph = "\uE71B" },
-            };
-            item.Click += (_, _) => _ = QuickLoadShortcutAsync(path);
-            menu.Items.Add(item);
-        }
-    }
-
-    /// <summary>Loads one desktop shortcut into the Studio — same pipeline as the file picker.</summary>
+    /// <summary>Loads one dropped/picked shortcut into the Studio — same pipeline as the file picker.</summary>
     private async Task QuickLoadShortcutAsync(string path)
     {
         if (_picking) return;
